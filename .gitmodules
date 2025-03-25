@@ -1,0 +1,3 @@
+[submodule "vendor/Dobby"]
+	path = vendor/Dobby
+	url = https://github.com/jmpews/Dobby.git
