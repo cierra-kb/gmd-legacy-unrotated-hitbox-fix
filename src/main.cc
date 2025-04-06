@@ -16,9 +16,14 @@ struct CCSize {
     float width, height;
 };
 
+struct CCPoint {
+    char inherited[0x18];
+    float x, y;
+};
+
 struct CCRect {
     char inherited[0x18];
-    char origin[0x20];
+    CCPoint position;
     CCSize size;
 };
 
@@ -27,10 +32,16 @@ const CCRect GameObject_getObjectRect(void* self, float scaleX, float scaleY) {
     CCRect objectRect = TRAM_GameObject_getObjectRect(self, scaleX, scaleY);
     float rotation = std::fabs(mem::field_from_offset<float>(self, 0x20));
 
+    objectRect.position.x -= objectRect.size.width * -0.5;
+    objectRect.position.y -= objectRect.size.height * -0.5;
+    
     if (rotation == 90.0f || rotation == 270.0f) {
         std::swap(objectRect.size.width, objectRect.size.height);
     }
 
+    objectRect.position.x += objectRect.size.width * -0.5;
+    objectRect.position.y += objectRect.size.height * -0.5;
+    
     return objectRect;
 }
 
